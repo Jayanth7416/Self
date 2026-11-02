@@ -223,7 +223,7 @@ Human defines goal & constraints
         When teams audit their cloud analytics bill, the culprit is rarely exotic machine learning workloads. It is almost always three mundane patterns:
       </p>
       <ul>
-        <li><strong>Unpartitioned `SELECT *` downstream views</strong> that scan terabytes of historical data for every BI refresh.</li>
+        <li><strong>Unpartitioned <code>SELECT *</code> downstream views</strong> that scan terabytes of historical data for every BI refresh.</li>
         <li><strong>Full-refresh transformations</strong> rebuilding multi-year fact tables from scratch instead of merging incremental partitions.</li>
         <li><strong>High-cardinality joins prior to filtering</strong> that explode intermediate shuffle memory.</li>
       </ul>
@@ -308,10 +308,27 @@ const SIMULATOR_TASKS = [
   }
 ];
 
+function safeGetJSON(key, fallback) {
+  try {
+    const raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function safeSetItem(key, value) {
+  try {
+    localStorage.setItem(key, value);
+  } catch {
+    // Ignore storage quota or private-mode restrictions
+  }
+}
+
 let currentEssayId = ESSAYS[0].id;
 let activeCategory = 'all';
-let bookmarkedIds = new Set(JSON.parse(localStorage.getItem('sc_bookmarks') || '[]'));
-let clapCounts = JSON.parse(localStorage.getItem('sc_claps') || '{}');
+let bookmarkedIds = new Set(safeGetJSON('sc_bookmarks', []));
+let clapCounts = safeGetJSON('sc_claps', {});
 
 function showToast(message) {
   const toast = document.getElementById('toastNotification');
@@ -359,6 +376,12 @@ function renderArticle(essayId, scrollToTop = false) {
     link.href = `#${h2.id}`;
     link.className = `toc-link ${idx === 0 ? 'active' : ''}`;
     link.textContent = h2.textContent;
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      tocEl.querySelectorAll('.toc-link').forEach((l) => l.classList.remove('active'));
+      link.classList.add('active');
+      h2.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
     tocEl.appendChild(link);
   });
 
@@ -478,14 +501,32 @@ function initEvents() {
   });
 
   // Theme Toggle
-  const savedTheme = localStorage.getItem('sc_theme') || 'dark';
+  let savedTheme = 'dark';
+  try {
+    savedTheme = localStorage.getItem('sc_theme') || 'dark';
+  } catch {
+    savedTheme = 'dark';
+  }
   document.documentElement.setAttribute('data-theme', savedTheme);
   document.getElementById('themeToggle').addEventListener('click', () => {
     const current = document.documentElement.getAttribute('data-theme');
     const next = current === 'dark' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem('sc_theme', next);
+    safeSetItem('sc_theme', next);
   });
+
+  // Brand Home Link
+  const brandLink = document.getElementById('brandHomeLink');
+  if (brandLink) {
+    brandLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      document.querySelectorAll('.nav-btn').forEach((b) => {
+        b.classList.toggle('active', b.dataset.view === 'featured');
+      });
+      renderArticle(ESSAYS[0].id, true);
+      renderEssaysGrid();
+    });
+  }
 
   // Share Button
   document.getElementById('sharePageBtn').addEventListener('click', async () => {
@@ -502,7 +543,7 @@ function initEvents() {
     const essay = ESSAYS.find((e) => e.id === currentEssayId);
     const current = clapCounts[currentEssayId] ?? essay.claps;
     clapCounts[currentEssayId] = current + 1;
-    localStorage.setItem('sc_claps', JSON.stringify(clapCounts));
+    safeSetItem('sc_claps', JSON.stringify(clapCounts));
     document.getElementById('clapCount').textContent = clapCounts[currentEssayId];
     document.getElementById('applaudBtn').classList.add('active');
     showToast('Thanks for applauding this essay! 👏');
@@ -517,7 +558,7 @@ function initEvents() {
       bookmarkedIds.add(currentEssayId);
       showToast('Saved to your reading bookmarks ★');
     }
-    localStorage.setItem('sc_bookmarks', JSON.stringify([...bookmarkedIds]));
+    safeSetItem('sc_bookmarks', JSON.stringify([...bookmarkedIds]));
     renderArticle(currentEssayId, false);
   });
 
@@ -539,6 +580,7 @@ function initEvents() {
       const view = btn.dataset.view;
       if (view === 'featured') {
         renderArticle(ESSAYS[0].id, true);
+        renderEssaysGrid();
       } else if (view === 'all-posts') {
         document.getElementById('allPostsSection').scrollIntoView({ behavior: 'smooth' });
       } else if (view === 'interactive') {
@@ -548,11 +590,17 @@ function initEvents() {
   });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+function initApp() {
   const hashId = window.location.hash.replace('#', '');
   const initialEssay = ESSAYS.find((e) => e.id === hashId) ? hashId : ESSAYS[0].id;
   renderArticle(initialEssay, false);
   renderSimulator();
   renderEssaysGrid();
   initEvents();
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initApp);
+} else {
+  initApp();
+}
