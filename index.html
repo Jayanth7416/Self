@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Signal &amp; Craft — Essays on AI Agents, Engineering &amp; Deep Work</title>
+  <meta name="description" content="Thoughtful essays on how AI agents are rewiring daily workflows, resilient software architecture, and reclaiming deep human focus." />
+  <meta property="og:title" content="The Co-Pilot Paradox: How AI Agents Are Rewiring Daily Workflows" />
+  <meta property="og:description" content="Where autonomous agents create 10x leverage—and why taste, problem framing, and human judgment matter more than ever." />
+  <meta property="og:type" content="article" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Reading Progress Bar -->
+  <div class="progress-container" aria-hidden="true">
+    <div class="progress-bar" id="readingProgress"></div>
+  </div>
+
+  <!-- Top Navigation -->
+  <header class="site-header">
+    <div class="container nav-inner">
+      <a href="#top" class="brand" id="brandHomeLink">
+        <span class="brand-mark">✦</span>
+        <div class="brand-text">
+          <span class="brand-name">Signal &amp; Craft</span>
+          <span class="brand-tagline">AI, Systems &amp; Human Judgment</span>
+        </div>
+      </a>
+
+      <nav class="nav-links" aria-label="Primary Navigation">
+        <button class="nav-btn active" data-view="featured">Featured Essay</button>
+        <button class="nav-btn" data-view="all-posts">All Essays <span class="badge-count">4</span></button>
+        <button class="nav-btn" data-view="interactive">Workflow Simulator</button>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="icon-btn" id="sharePageBtn" title="Copy page link" aria-label="Copy page link">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+        </button>
+        <button class="icon-btn" id="themeToggle" title="Toggle Dark/Light Mode" aria-label="Toggle Dark/Light Mode">
+          <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+          <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- Hero / Featured Article Header -->
+    <section class="article-hero" id="articleHero">
+      <div class="container hero-inner">
+        <div class="hero-meta">
+          <span class="category-pill" id="heroCategory">AI &amp; Productivity</span>
+          <span class="meta-dot">•</span>
+          <time id="heroDate" datetime="2026-11-02">November 2, 2026</time>
+          <span class="meta-dot">•</span>
+          <span id="heroReadTime">8 min read</span>
+        </div>
+
+        <h1 class="hero-title" id="heroTitle">
+          The Co-Pilot Paradox: How AI Agents Are Rewiring Daily Workflows (And What Still Needs a Human Touch)
+        </h1>
+
+        <p class="hero-subtitle" id="heroSubtitle">
+          We are moving from prompt-and-paste chatbots to autonomous agents that read context, execute tools, and iterate. When execution becomes cheap, human taste, problem framing, and verification become the ultimate bottlenecks.
+        </p>
+
+        <div class="author-bar">
+          <div class="author-info">
+            <div class="author-avatar">JK</div>
+            <div>
+              <div class="author-name">Jayanth Kumar</div>
+              <div class="author-role">Builder &amp; Technologist • Public Notebook</div>
+            </div>
+          </div>
+
+          <div class="article-actions">
+            <button class="action-pill" id="applaudBtn" aria-label="Applaud this essay">
+              <span class="clap-icon">👏</span>
+              <span id="clapCount">142</span>
+            </button>
+            <button class="action-pill" id="bookmarkBtn" aria-label="Bookmark essay">
+              <span id="bookmarkLabel">Bookmark</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Layout: Sidebar TOC + Article Body -->
+    <section class="content-section container">
+      <div class="article-grid">
+        <!-- Sticky Sidebar -->
+        <aside class="article-sidebar">
+          <div class="sidebar-card">
+            <div class="sidebar-label">On this page</div>
+            <nav class="toc-nav" id="tocList" aria-label="Table of Contents">
+              <!-- Populated dynamically by app.js -->
+            </nav>
+          </div>
+
+          <div class="sidebar-card highlight-box">
+            <div class="sidebar-label">Core Takeaway</div>
+            <p class="sidebar-quote" id="sidebarTakeaway">
+              “AI agents don’t eliminate the need for senior judgment—they remove the friction that used to hide whether you had clear judgment in the first place.”
+            </p>
+          </div>
+
+          <div class="sidebar-card">
+            <div class="sidebar-label">More Popular Reads</div>
+            <div class="mini-post-list" id="sidebarPostList">
+              <!-- Populated dynamically -->
+            </div>
+          </div>
+        </aside>
+
+        <!-- Primary Article Content -->
+        <article class="prose" id="articleContent">
+          <!-- Populated dynamically by app.js -->
+        </article>
+      </div>
+    </section>
+
+    <!-- Interactive Workflow Delegation Calculator Section -->
+    <section class="simulator-section" id="simulatorSection">
+      <div class="container">
+        <div class="simulator-card">
+          <div class="simulator-header">
+            <div>
+              <span class="category-pill">Interactive Framework</span>
+              <h2>The “Delegate vs. Own” Workflow Simulator</h2>
+              <p>Toggle your weekly engineering &amp; knowledge-work tasks below to see how an agentic workflow shifts your hours—and where human sign-off remains non-negotiable.</p>
+            </div>
+            <div class="simulator-stats">
+              <div class="stat-box">
+                <span class="stat-value" id="hoursSavedVal">11.5h</span>
+                <span class="stat-label">Saved / Week</span>
+              </div>
+              <div class="stat-box accent">
+                <span class="stat-value" id="deepWorkGainVal">+38%</span>
+                <span class="stat-label">Deep Focus Capacity</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="task-matrix" id="taskMatrix">
+            <!-- Rendered by app.js -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- All Essays / Explore More Topics Section -->
+    <section class="more-essays-section" id="allPostsSection">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <h2>Explore More High-Signal Topics</h2>
+            <p>Curated reads on systems engineering, deep work psychology, and cloud architecture—click any essay to read in full.</p>
+          </div>
+          <div class="filter-controls" id="categoryFilters">
+            <button class="filter-chip active" data-category="all">All Topics</button>
+            <button class="filter-chip" data-category="AI & Productivity">AI &amp; Productivity</button>
+            <button class="filter-chip" data-category="Systems & Engineering">Systems &amp; Engineering</button>
+            <button class="filter-chip" data-category="Focus & Psychology">Focus &amp; Psychology</button>
+            <button class="filter-chip" data-category="Data & Cloud">Data &amp; Cloud</button>
+          </div>
+        </div>
+
+        <div class="essays-grid" id="essaysGrid">
+          <!-- Populated by app.js -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="brand-mark">✦</span>
+        <span><strong>Signal &amp; Craft</strong> — Published by Jayanth Kumar</span>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/Jayanth7416/Self" target="_blank" rel="noopener">GitHub Repository</a>
+        <span>•</span>
+        <a href="#top">Back to Top ↑</a>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast" id="toastNotification" role="status" aria-live="polite">Link copied to clipboard!</div>
+
+  <script src="app.js"></script>
+</body>
+</html>
